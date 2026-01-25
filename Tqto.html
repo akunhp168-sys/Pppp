@@ -1,0 +1,1166 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TQTO - X-GPT Team</title>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* ================= RESET & BASE ================= */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #dc2626;
+            --primary-dark: #991b1b;
+            --primary-light: #fecaca;
+            --secondary: #1e293b;
+            --bg-dark: #0a0a0a;
+            --bg-darker: #000000;
+            --bg-card: #1a1a1a;
+            --text-primary: #ffffff;
+            --text-secondary: #a0a0a0;
+            --border: #333333;
+            --success: #10b981;
+        }
+
+        body {
+            font-family: 'Rajdhani', sans-serif;
+            background: var(--bg-darker);
+            color: var(--text-primary);
+            min-height: 100vh;
+            line-height: 1.6;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(220, 38, 38, 0.05) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(220, 38, 38, 0.03) 0%, transparent 20%);
+        }
+
+        /* ================= BACKGROUND STARS ================= */
+        .star-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 3s infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+
+        /* ================= STICKY BACK BUTTON ================= */
+        .sticky-back-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1000;
+            width: 50px;
+            height: 50px;
+        }
+
+        .back-btn {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border: none;
+            border-radius: 50%;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            box-shadow: 0 4px 15px rgba(220, 38, 38, 0.3);
+            transition: all 0.3s;
+        }
+
+        .back-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(220, 38, 38, 0.5);
+        }
+
+        /* ================= CONTAINER ================= */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 100px 20px 40px; /* Tambah padding atas untuk back button */
+        }
+
+        /* ================= HEADER ================= */
+        .header {
+            text-align: center;
+            padding: 40px 20px;
+            position: relative;
+            margin-bottom: 40px;
+        }
+
+        .logo-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .logo-icon {
+            font-size: 50px;
+            color: var(--primary);
+            text-shadow: 0 0 20px rgba(220, 38, 38, 0.5);
+        }
+
+        .logo-text {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 48px;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .tagline {
+            font-size: 18px;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.8;
+        }
+
+        /* ================= MAIN CONTENT ================= */
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 40px;
+            margin-bottom: 60px;
+        }
+
+        @media (min-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        /* ================= CARD ================= */
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 30px;
+            transition: all 0.3s;
+            height: 100%;
+        }
+
+        .card:hover {
+            border-color: var(--primary);
+            box-shadow: 0 10px 30px rgba(220, 38, 38, 0.1);
+            transform: translateY(-5px);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--primary);
+        }
+
+        .card-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            color: white;
+        }
+
+        .card-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        /* ================= DEVELOPER SECTION ================= */
+        .developer-info {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            gap: 25px;
+        }
+
+        .profile-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            width: 100%;
+        }
+
+        .profile-img-container {
+            position: relative;
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 4px solid var(--primary);
+            box-shadow: 0 0 30px rgba(220, 38, 38, 0.3);
+            transition: all 0.3s;
+            background: linear-gradient(135deg, var(--primary-dark), var(--bg-card));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .profile-img-container:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 40px rgba(220, 38, 38, 0.5);
+        }
+
+        .profile-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s;
+        }
+
+        .profile-img:hover {
+            transform: scale(1.1);
+        }
+
+        .profile-placeholder {
+            font-size: 60px;
+            color: rgba(220, 38, 38, 0.5);
+        }
+
+        .profile-upload-container {
+            width: 100%;
+            max-width: 400px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px dashed var(--border);
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .upload-instructions {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .upload-instructions h4 {
+            color: var(--primary-light);
+            margin-bottom: 10px;
+        }
+
+        .upload-instructions p {
+            color: var(--text-secondary);
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+
+        .upload-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .upload-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 12px;
+            background: rgba(220, 38, 38, 0.1);
+            border: 1px solid var(--primary);
+            border-radius: 10px;
+            color: var(--primary-light);
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+
+        .upload-btn:hover {
+            background: rgba(220, 38, 38, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .url-input-container {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .url-input {
+            flex: 1;
+            padding: 10px 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 14px;
+            font-family: inherit;
+        }
+
+        .url-input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .url-submit-btn {
+            padding: 10px 20px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border: none;
+            border-radius: 8px;
+            color: white;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .url-submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(220, 38, 38, 0.3);
+        }
+
+        .profile-details {
+            text-align: center;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .profile-name {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .profile-name:hover {
+            color: var(--primary-light);
+        }
+
+        .profile-role {
+            font-size: 18px;
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+        }
+
+        .profile-bio {
+            color: var(--text-secondary);
+            font-size: 16px;
+            line-height: 1.6;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        /* ================= SOCIAL MEDIA ================= */
+        .social-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .social-card {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            text-decoration: none;
+            color: var(--text-primary);
+            transition: all 0.3s;
+        }
+
+        .social-card:hover {
+            background: rgba(220, 38, 38, 0.1);
+            border-color: var(--primary);
+            transform: translateX(5px);
+        }
+
+        .social-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            color: white;
+        }
+
+        .social-icon.whatsapp { background: linear-gradient(135deg, #25D366, #128C7E); }
+        .social-icon.telegram { background: linear-gradient(135deg, #0088cc, #006699); }
+        .social-icon.instagram { background: linear-gradient(135deg, #E4405F, #C13584); }
+        .social-icon.tiktok { background: linear-gradient(135deg, #000000, #69C9D0); }
+        .social-icon.youtube { background: linear-gradient(135deg, #FF0000, #CC0000); }
+        .social-icon.github { background: linear-gradient(135deg, #333333, #000000); }
+        .social-icon.discord { background: linear-gradient(135deg, #5865F2, #404EED); }
+
+        .social-info {
+            flex: 1;
+        }
+
+        .social-name {
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 4px;
+        }
+
+        .social-handle {
+            color: var(--text-secondary);
+            font-size: 12px;
+        }
+
+        /* ================= ABOUT TQTO ================= */
+        .about-content {
+            font-size: 16px;
+            line-height: 1.8;
+        }
+
+        .about-content p {
+            margin-bottom: 20px;
+            color: var(--text-secondary);
+        }
+
+        .about-content strong {
+            color: var(--primary-light);
+            font-weight: 600;
+        }
+
+        .feature-list {
+            list-style: none;
+            margin: 25px 0;
+            padding-left: 0;
+        }
+
+        .feature-list li {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+            padding: 10px 15px;
+            background: rgba(220, 38, 38, 0.05);
+            border-radius: 8px;
+            border-left: 3px solid var(--primary);
+        }
+
+        .feature-list i {
+            color: var(--primary);
+        }
+
+        /* ================= CONTACT FORM ================= */
+        .contact-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .form-label {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .form-input, .form-textarea {
+            padding: 12px 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            color: var(--text-primary);
+            font-size: 14px;
+            font-family: inherit;
+            transition: all 0.3s;
+        }
+
+        .form-input:focus, .form-textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
+        }
+
+        .form-textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'Orbitron', sans-serif;
+            letter-spacing: 1px;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(220, 38, 38, 0.3);
+        }
+
+        /* ================= FOOTER ================= */
+        .footer {
+            text-align: center;
+            padding: 40px 20px;
+            border-top: 1px solid var(--border);
+            margin-top: 60px;
+            color: var(--text-secondary);
+        }
+
+        .footer-logo {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .footer-logo-text {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 20px;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .copyright {
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .made-with {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+            margin-top: 20px;
+        }
+
+        .heart {
+            color: var(--primary);
+            animation: heartbeat 1.5s infinite;
+        }
+
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        /* ================= RESPONSIVE ================= */
+        @media (max-width: 768px) {
+            .container {
+                padding: 80px 15px 30px;
+            }
+            
+            .logo-text {
+                font-size: 36px;
+            }
+            
+            .card {
+                padding: 20px;
+            }
+            
+            .profile-img-container {
+                width: 150px;
+                height: 150px;
+            }
+            
+            .profile-name {
+                font-size: 24px;
+            }
+            
+            .sticky-back-btn {
+                top: 15px;
+                left: 15px;
+                width: 45px;
+                height: 45px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header {
+                padding: 30px 15px;
+            }
+            
+            .logo-text {
+                font-size: 28px;
+            }
+            
+            .tagline {
+                font-size: 16px;
+            }
+            
+            .social-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .upload-buttons {
+                flex-direction: column;
+            }
+            
+            .url-input-container {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- BACKGROUND STARS -->
+    <div class="star-container" id="starsContainer"></div>
+
+    <!-- STICKY BACK BUTTON -->
+    <div class="sticky-back-btn">
+        <!-- GANTI LINK DI BAWAH INI SESUAI KEBUTUHAN -->
+        <a href="https://your-website.com" class="back-btn" title="Back to Home">
+            <i class="fas fa-arrow-left"></i>
+        </a>
+    </div>
+
+    <!-- HEADER -->
+    <header class="header">
+        <div class="logo-container">
+            <i class="fas fa-users logo-icon"></i>
+            <h1 class="logo-text">TQTO</h1>
+        </div>
+        
+        <p class="tagline">
+            Official Development Team of X-GPT AI Assistant<br>
+            Building the Future of Artificial Intelligence
+        </p>
+    </header>
+
+    <!-- MAIN CONTENT -->
+    <div class="container">
+        <main class="main-content">
+            <!-- DEVELOPER PROFILE -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <i class="fas fa-user-tie"></i>
+                    </div>
+                    <h2 class="card-title">Developer Profile</h2>
+                </div>
+                
+                <div class="developer-info">
+                    <div class="profile-section">
+                        <div class="profile-img-container">
+                            <!-- FOTO AKAN DIMUAT DARI LOCALSTORAGE ATAU DEFAULT -->
+                            <img id="profileImage" class="profile-img" alt="Developer Profile">
+                            <div id="profilePlaceholder" class="profile-placeholder">
+                                <i class="fas fa-user"></i>
+                            </div>
+                        </div>
+                        
+                        <div class="profile-upload-container">
+                            <div class="upload-instructions">
+                                <h4>Upload Profile Picture</h4>
+                                <p>1. Upload to <strong>catbox.moe</strong> or similar service</p>
+                                <p>2. Copy the direct image URL</p>
+                                <p>3. Paste below</p>
+                            </div>
+                            
+                            <div class="upload-buttons">
+                                <!-- Button untuk upload dari URL -->
+                                <div class="url-input-container">
+                                    <input type="text" id="imageUrlInput" class="url-input" 
+                                           placeholder="https://files.catbox.moe/example.jpg">
+                                    <button onclick="updateProfileFromUrl()" class="url-submit-btn">
+                                        <i class="fas fa-link"></i> Set URL
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="profile-details">
+                            <h3 id="developerName" class="profile-name">AryaFox</h3>
+                            <p class="profile-role">Lead Developer & Founder</p>
+                            <p class="profile-bio">
+                                Full-stack developer and AI enthusiast with over 5 years of experience 
+                                in building cutting-edge applications. Passionate about creating 
+                                innovative solutions that push technological boundaries.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SOSIAL MEDIA (tetap sama seperti sebelumnya) -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <i class="fas fa-share-alt"></i>
+                    </div>
+                    <h2 class="card-title">Social Media</h2>
+                </div>
+                
+                <div class="social-grid">
+                    <a href="https://whatsapp.com/channel/0029Vb7D56x1NCrVzkFWOm2H" target="_blank" class="social-card">
+                        <div class="social-icon whatsapp">
+                            <i class="fab fa-whatsapp"></i>
+                        </div>
+                        <div class="social-info">
+                            <div class="social-name">WhatsApp Channel</div>
+                            <div class="social-handle">X-GPT Information</div>
+                        </div>
+                    </a>
+                    
+                    <a href="https://t.me/xgptowner" target="_blank" class="social-card">
+                        <div class="social-icon telegram">
+                            <i class="fab fa-telegram"></i>
+                        </div>
+                        <div class="social-info">
+                            <div class="social-name">Telegram</div>
+                            <div class="social-handle">@xgptowner</div>
+                        </div>
+                    </a>
+                    
+                    <a href="https://www.instagram.com/adfayafathinarya" target="_blank" class="social-card">
+                        <div class="social-icon instagram">
+                            <i class="fab fa-instagram"></i>
+                        </div>
+                        <div class="social-info">
+                            <div class="social-name">Instagram</div>
+                            <div class="social-handle">@adfayafathinarya</div>
+                        </div>
+                    </a>
+                    
+                    <a href="https://tiktok.com/@adfayafathinarya" target="_blank" class="social-card">
+                        <div class="social-icon tiktok">
+                            <i class="fab fa-tiktok"></i>
+                        </div>
+                        <div class="social-info">
+                            <div class="social-name">TikTok</div>
+                            <div class="social-handle">@adfayafathinarya</div>
+                        </div>
+                    </a>
+                    
+                    <a href="https://github.com/aryafox" target="_blank" class="social-card">
+                        <div class="social-icon github">
+                            <i class="fab fa-github"></i>
+                        </div>
+                        <div class="social-info">
+                            <div class="social-name">GitHub</div>
+                            <div class="social-handle">@aryafox</div>
+                        </div>
+                    </a>
+                    
+                    <a href="https://discord.gg/your-invite" target="_blank" class="social-card">
+                        <div class="social-icon discord">
+                            <i class="fab fa-discord"></i>
+                        </div>
+                        <div class="social-info">
+                            <div class="social-name">Discord</div>
+                            <div class="social-handle">Join Community</div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <!-- ABOUT TQTO (tetap sama) -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <i class="fas fa-info-circle"></i>
+                    </div>
+                    <h2 class="card-title">About TQTO Team</h2>
+                </div>
+                
+                <div class="about-content">
+                    <p>
+                        <strong>TQTO (Technology Quality & Tech Operations)</strong> is the official 
+                        development team behind X-GPT AI Assistant. We are dedicated to creating 
+                        innovative AI solutions that are accessible, powerful, and user-friendly.
+                    </p>
+                    
+                    <ul class="feature-list">
+                        <li>
+                            <i class="fas fa-check-circle"></i>
+                            <span>Expertise in AI/ML Development</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-check-circle"></i>
+                            <span>Full-stack Web Development</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-check-circle"></i>
+                            <span>Mobile Application Development</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-check-circle"></i>
+                            <span>Cloud Infrastructure & DevOps</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-check-circle"></i>
+                            <span>UI/UX Design & User Experience</span>
+                        </li>
+                    </ul>
+                    
+                    <p>
+                        Our mission is to democratize AI technology and make it accessible to everyone, 
+                        regardless of their technical background. We believe in open collaboration and 
+                        continuous innovation.
+                    </p>
+                </div>
+            </div>
+
+            <!-- CONTACT FORM (tetap sama) -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                    <h2 class="card-title">Contact Us</h2>
+                </div>
+                
+                <form class="contact-form" id="contactForm">
+                    <div class="form-group">
+                        <label class="form-label" for="name">Full Name</label>
+                        <input type="text" id="name" class="form-input" placeholder="Enter your name" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="email">Email Address</label>
+                        <input type="email" id="email" class="form-input" placeholder="Enter your email" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="subject">Subject</label>
+                        <input type="text" id="subject" class="form-input" placeholder="What is this about?" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="message">Message</label>
+                        <textarea id="message" class="form-textarea" placeholder="Type your message here..." required></textarea>
+                    </div>
+                    
+                    <button type="submit" class="submit-btn">
+                        <i class="fas fa-paper-plane"></i> Send Message
+                    </button>
+                </form>
+            </div>
+        </main>
+    </div>
+
+    <!-- FOOTER (tetap sama) -->
+    <footer class="footer">
+        <div class="footer-logo">
+            <i class="fas fa-robot" style="color: var(--primary); font-size: 18px;"></i>
+            <span class="footer-logo-text">X-GPT AI</span>
+        </div>
+        
+        <p class="copyright">
+            &copy; 2024 X-GPT AI Assistant. All rights reserved.<br>
+            Developed with ❤️ by TQTO Team
+        </p>
+        
+        <div class="made-with">
+            <span>Made with</span>
+            <i class="fas fa-heart heart"></i>
+            <span>by AryaFox</span>
+        </div>
+    </footer>
+
+    <script>
+        // ================= CONFIGURASI =================
+        const CONFIG = {
+            // GANTI LINK BACK BUTTON SESUAI KEBUTUHAN
+            backButtonUrl: "https://your-website.com",
+            
+            // Default profile image jika tidak ada di localStorage
+            defaultProfileImage: "https://files.catbox.moe/3sziq2.jpg"
+        };
+
+        // ================= FUNGSI UTAMA =================
+        
+        // Create background stars
+        function createStars() {
+            const container = document.getElementById('starsContainer');
+            for (let i = 0; i < 100; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.left = `${Math.random() * 100}%`;
+                star.style.top = `${Math.random() * 100}%`;
+                star.style.width = `${Math.random() * 3 + 1}px`;
+                star.style.height = star.style.width;
+                star.style.animationDelay = `${Math.random() * 3}s`;
+                container.appendChild(star);
+            }
+        }
+
+        // Load profile image from localStorage
+        function loadProfileImage() {
+            const savedImage = localStorage.getItem('tqto_profile_image');
+            const profileImg = document.getElementById('profileImage');
+            const placeholder = document.getElementById('profilePlaceholder');
+            
+            if (savedImage && savedImage.trim() !== '') {
+                // Set image source
+                profileImg.src = savedImage;
+                profileImg.style.display = 'block';
+                placeholder.style.display = 'none';
+                
+                // Set input value
+                document.getElementById('imageUrlInput').value = savedImage;
+            } else {
+                // Use default image
+                profileImg.src = CONFIG.defaultProfileImage;
+                profileImg.style.display = 'block';
+                placeholder.style.display = 'none';
+                
+                // Save default to localStorage
+                localStorage.setItem('tqto_profile_image', CONFIG.defaultProfileImage);
+                document.getElementById('imageUrlInput').value = CONFIG.defaultProfileImage;
+            }
+            
+            // Handle image loading error
+            profileImg.onerror = function() {
+                console.error('Failed to load profile image:', this.src);
+                profileImg.style.display = 'none';
+                placeholder.style.display = 'flex';
+                showNotification('Failed to load image. Please check the URL.', 'error');
+            };
+        }
+
+        // Update profile image from URL input
+        function updateProfileFromUrl() {
+            const input = document.getElementById('imageUrlInput');
+            const url = input.value.trim();
+            
+            if (!url) {
+                showNotification('Please enter an image URL', 'error');
+                return;
+            }
+            
+            // Validate URL
+            if (!isValidUrl(url)) {
+                showNotification('Please enter a valid URL (http:// or https://)', 'error');
+                return;
+            }
+            
+            // Check if it's a catbox URL or similar image host
+            if (!isImageUrl(url)) {
+                showNotification('Please enter a direct image URL (jpg, png, gif)', 'error');
+                return;
+            }
+            
+            // Create test image to check if it loads
+            const testImg = new Image();
+            testImg.onload = function() {
+                // Save to localStorage
+                localStorage.setItem('tqto_profile_image', url);
+                
+                // Update display
+                const profileImg = document.getElementById('profileImage');
+                const placeholder = document.getElementById('profilePlaceholder');
+                
+                profileImg.src = url;
+                profileImg.style.display = 'block';
+                placeholder.style.display = 'none';
+                
+                showNotification('Profile picture updated successfully!', 'success');
+            };
+            
+            testImg.onerror = function() {
+                showNotification('Failed to load image from URL. Please check the link.', 'error');
+            };
+            
+            testImg.src = url;
+        }
+
+        // Validate URL
+        function isValidUrl(string) {
+            try {
+                new URL(string);
+                return true;
+            } catch (_) {
+                return false;
+            }
+        }
+
+        // Check if URL is an image
+        function isImageUrl(url) {
+            return /\.(jpg|jpeg|png|gif|webp|bmp)$/i.test(url) || 
+                   /catbox\.moe|imgur\.com|i\.imgur\.com|ibb\.co|imageshack\.com/i.test(url);
+        }
+
+        // Developer name editing
+        const developerName = document.getElementById('developerName');
+        let isEditing = false;
+        
+        developerName.addEventListener('click', function() {
+            if (!isEditing) {
+                isEditing = true;
+                const currentName = this.textContent;
+                this.innerHTML = `<input type="text" id="nameInput" value="${currentName}" 
+                    style="background: rgba(255,255,255,0.1); border: 1px solid var(--primary); 
+                    color: var(--primary); padding: 5px 10px; border-radius: 5px; 
+                    font: inherit; width: 200px; text-align: center;">`;
+                
+                const input = document.getElementById('nameInput');
+                input.focus();
+                input.select();
+                
+                input.addEventListener('blur', function() {
+                    saveName(this.value);
+                });
+                
+                input.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        saveName(this.value);
+                    }
+                });
+            }
+        });
+        
+        function saveName(newName) {
+            if (newName && newName.trim()) {
+                const trimmedName = newName.trim();
+                developerName.textContent = trimmedName;
+                localStorage.setItem('tqto_developer_name', trimmedName);
+                showNotification('Developer name updated!', 'success');
+            }
+            isEditing = false;
+        }
+
+        // Load saved name
+        function loadSavedName() {
+            const savedName = localStorage.getItem('tqto_developer_name');
+            if (savedName) {
+                developerName.textContent = savedName;
+            }
+        }
+
+        // Contact form submission
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            
+            // Here you would normally send the data to a server
+            showNotification(`Thank you ${name}! Your message has been received. We'll get back to you soon at ${email}.`, 'success');
+            
+            // Reset form
+            this.reset();
+        });
+
+        // Notification function
+        function showNotification(message, type) {
+            // Create notification element
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.innerHTML = `
+                <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i>
+                <span>${message}</span>
+            `;
+            
+            // Style notification
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: ${type === 'success' ? 'rgba(16, 185, 129, 0.9)' : 'rgba(220, 38, 38, 0.9)'};
+                color: white;
+                padding: 15px 20px;
+                border-radius: 10px;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                z-index: 1001;
+                animation: slideIn 0.3s ease;
+                font-family: 'Rajdhani', sans-serif;
+                font-weight: 600;
+                max-width: 400px;
+                box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            `;
+            
+            // Add to document
+            document.body.appendChild(notification);
+            
+            // Remove after 5 seconds
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.3s ease';
+                setTimeout(() => notification.remove(), 300);
+            }, 5000);
+            
+            // Add CSS animations if not already added
+            if (!document.querySelector('#notificationStyles')) {
+                const style = document.createElement('style');
+                style.id = 'notificationStyles';
+                style.textContent = `
+                    @keyframes slideIn {
+                        from { transform: translateX(100%); opacity: 0; }
+                        to { transform: translateX(0); opacity: 1; }
+                    }
+                    @keyframes slideOut {
+                        from { transform: translateX(0); opacity: 1; }
+                        to { transform: translateX(100%); opacity: 0; }
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+        }
+
+        // Set back button URL
+        function setupBackButton() {
+            const backButton = document.querySelector('.back-btn');
+            if (CONFIG.backButtonUrl) {
+                backButton.href = CONFIG.backButtonUrl;
+            }
+        }
+
+        // Initialize everything
+        document.addEventListener('DOMContentLoaded', function() {
+            createStars();
+            loadProfileImage();
+            loadSavedName();
+            setupBackButton();
+            
+            // Focus input field
+            document.getElementById('imageUrlInput').focus();
+        });
+    </script>
+</body>
+</html>
