@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Zero Chat</title>
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body, html {
+            width: 100%;
+            height: 100%;
+            font-family: 'Inter', sans-serif;
+            background: #0a0c0e;
+            color: white;
+        }
+
+        /* FULL SCREEN, NO KOTAK² */
+        .full-screen {
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* HEADER SUPER SIMPEL */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 24px;
+            background: #080a0c;
+            border-bottom: 1px solid #1e2428;
+        }
+
+        .zero-title {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: white;
+            letter-spacing: -0.5px;
+        }
+
+        .zero-title i {
+            color: #70a3ff;
+            margin-right: 8px;
+        }
+
+        .logout-btn {
+            background: none;
+            border: 1px solid #3f4a54;
+            color: #ffa6a6;
+            padding: 8px 18px;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+
+        .logout-btn:hover {
+            background: #2a313a;
+            border-color: #ff8a8a;
+        }
+
+        .hide {
+            display: none !important;
+        }
+
+        /* =========== LOGIN PAGE - SUPER SIMPEL =========== */
+        .login-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            background: #0a0c0e;
+        }
+
+        .login-box {
+            width: 100%;
+            max-width: 340px;
+        }
+
+        .login-title {
+            font-size: 2.4rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: white;
+        }
+
+        .login-sub {
+            color: #a0b3cc;
+            margin-bottom: 36px;
+            font-size: 0.95rem;
+            border-bottom: 1px solid #2a323c;
+            padding-bottom: 16px;
+        }
+
+        .input-field {
+            width: 100%;
+            background: #141a20;
+            border: 1px solid #2d363f;
+            border-radius: 12px;
+            padding: 16px 18px;
+            font-size: 1rem;
+            color: white;
+            margin-bottom: 16px;
+            outline: none;
+        }
+
+        .input-field:focus {
+            border-color: #70a3ff;
+            background: #0f151b;
+        }
+
+        .login-btn {
+            width: 100%;
+            background: #2a66b0;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 16px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 8px;
+            cursor: pointer;
+        }
+
+        .login-btn:hover {
+            background: #1e4f8a;
+        }
+
+        .db-note {
+            margin-top: 32px;
+            color: #7c8ba0;
+            font-size: 0.75rem;
+            text-align: center;
+        }
+
+        /* =========== CHAT PAGE - FULL SCREEN, POKOKNYA CHAT DOANG =========== */
+        .chat-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: #0a0c0e;
+            height: 100%;
+            width: 100%;
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 24px 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            background: #0a0c0e;
+        }
+
+        /* CHAT BUBBLE - MINIMAL */
+        .message {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            max-width: 85%;
+        }
+
+        .message-own {
+            align-self: flex-end;
+            flex-direction: row-reverse;
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 40px;
+            background: #1f2a36;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 1rem;
+            color: white;
+            flex-shrink: 0;
+            border: 1px solid #4d6a8f;
+        }
+
+        .bubble {
+            background: #1c232c;
+            padding: 12px 18px;
+            border-radius: 20px 20px 20px 4px;
+            border: 1px solid #2e3a46;
+            color: #f0f5fa;
+            font-size: 0.98rem;
+            line-height: 1.5;
+            word-break: break-word;
+        }
+
+        .message-own .bubble {
+            background: #1a3345;
+            border: 1px solid #3a6285;
+            border-radius: 20px 20px 4px 20px;
+        }
+
+        .user-name {
+            font-weight: 700;
+            color: #b8d4ff;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.9rem;
+        }
+
+        .time {
+            font-size: 0.6rem;
+            color: #96a2ba;
+            font-weight: 400;
+        }
+
+        /* ===== INPUT BAWAH - FULL LEBAR, NO KOTAK KOTAK ===== */
+        .chat-input-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px 20px;
+            background: #0d1115;
+            border-top: 1px solid #20272e;
+            width: 100%;
+        }
+
+        .chat-input-wrapper input {
+            flex: 1;
+            background: #151e26;
+            border: 1px solid #2c3843;
+            border-radius: 30px;
+            padding: 16px 22px;
+            font-size: 1rem;
+            color: white;
+            outline: none;
+        }
+
+        .chat-input-wrapper input:focus {
+            border-color: #5f9eff;
+            background: #121b24;
+        }
+
+        .send-btn {
+            background: #2a66b0;
+            border: none;
+            color: white;
+            width: 54px;
+            height: 54px;
+            border-radius: 54px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+
+        .send-btn:hover {
+            background: #3678c7;
+        }
+
+        /* SCROLL */
+        .chat-messages::-webkit-scrollbar {
+            width: 5px;
+        }
+        .chat-messages::-webkit-scrollbar-thumb {
+            background: #394a5c;
+            border-radius: 10px;
+        }
+
+        /* no card, no kotak², full screen flat */
+    </style>
+</head>
+<body>
+    <div class="full-screen">
+        <!-- HEADER: judul doang & tombol keluar -->
+        <div class="header">
+            <div class="zero-title">
+                <i class="fas fa-comment"></i> Zero Chat
+            </div>
+            <button id="logoutButton" class="logout-btn hide">
+                <i class="fas fa-sign-out-alt"></i> Keluar
+            </button>
+        </div>
+
+        <!-- LOGIN PAGE - SIMPEL BANGET -->
+        <div id="loginPage" class="login-container">
+            <div class="login-box">
+                <div class="login-title">Zero</div>
+                <div class="login-sub">masuk pake akun database</div>
+                
+                <input type="text" id="usernameInput" class="input-field" placeholder="username" autocomplete="off">
+                <input type="password" id="passwordInput" class="input-field" placeholder="password">
+                
+                <button id="loginButton" class="login-btn">
+                    <i class="fas fa-arrow-right-to-bracket"></i> Masuk
+                </button>
+                
+                <div class="db-note">
+                    <i class="fas fa-database"></i> users.json · admin/x · premium/gemini2024 · user1/coba123
+                </div>
+            </div>
+        </div>
+
+        <!-- CHAT PAGE - FULL SCREEN POKOKNYA CHAT -->
+        <div id="chatPage" class="chat-container hide">
+            <!-- AREA PESAN -->
+            <div id="chatMessages" class="chat-messages">
+                <!-- pesan akan diisi js -->
+            </div>
+            
+            <!-- INPUT BAWAH - TEMPAT KAYAK -->
+            <div class="chat-input-wrapper">
+                <input type="text" id="messageInput" placeholder="Tulis pesan..." autocomplete="off">
+                <button id="sendButton" class="send-btn">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            'use strict';
+
+            // ----- ELEMEN -----
+            const loginPage = document.getElementById('loginPage');
+            const chatPage = document.getElementById('chatPage');
+            const logoutBtn = document.getElementById('logoutButton');
+            const loginBtn = document.getElementById('loginButton');
+            const usernameInput = document.getElementById('usernameInput');
+            const passwordInput = document.getElementById('passwordInput');
+            const chatMessagesDiv = document.getElementById('chatMessages');
+            const messageInput = document.getElementById('messageInput');
+            const sendBtn = document.getElementById('sendButton');
+
+            // ----- STATE -----
+            let currentUser = null;
+            let messages = [];
+            let usersDB = [];
+
+            // ----- TIME -----
+            function getTime() {
+                const d = new Date();
+                return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            }
+
+            // ----- LOAD DATABASE DARI GITHUB (DIAM²) -----
+            async function loadUsers() {
+                try {
+                    const res = await fetch('https://raw.githubusercontent.com/zero-chat/databasezero/refs/heads/main/users.json');
+                    const data = await res.json();
+                    usersDB = data.users || [];
+                } catch (e) {
+                    usersDB = [
+                        {"username": "admin", "password": "x"},
+                        {"username": "premium", "password": "gemini2024"},
+                        {"username": "user1", "password": "coba123"}
+                    ];
+                }
+            }
+
+            // ----- LOAD PESAN DARI LOCAL -----
+            function loadMessages() {
+                const stored = localStorage.getItem('zero_chat_history');
+                if (stored) {
+                    try {
+                        messages = JSON.parse(stored);
+                    } catch {
+                        messages = [];
+                    }
+                } else {
+                    messages = [
+                        { user: 'Zero', text: 'Chat siap pakai.', time: '10:00', avatar: 'Z' }
+                    ];
+                }
+            }
+
+            function saveMessages() {
+                localStorage.setItem('zero_chat_history', JSON.stringify(messages));
+            }
+
+            // ----- RENDER CHAT -----
+            function renderChat() {
+                if (!chatMessagesDiv) return;
+                chatMessagesDiv.innerHTML = '';
+
+                if (messages.length === 0) {
+                    chatMessagesDiv.innerHTML = '<div style="color:#8899aa; text-align:center; margin-top:40px;">Belum ada pesan</div>';
+                    return;
+                }
+
+                messages.forEach(msg => {
+                    const msgDiv = document.createElement('div');
+                    msgDiv.className = 'message';
+                    
+                    const isOwn = currentUser && msg.user === currentUser;
+                    if (isOwn) msgDiv.classList.add('message-own');
+
+                    // avatar
+                    const avatarDiv = document.createElement('div');
+                    avatarDiv.className = 'avatar';
+                    avatarDiv.textContent = msg.avatar || msg.user.charAt(0).toUpperCase() || 'Z';
+
+                    // bubble
+                    const bubbleDiv = document.createElement('div');
+                    bubbleDiv.className = 'bubble';
+                    
+                    const userSpan = document.createElement('div');
+                    userSpan.className = 'user-name';
+                    userSpan.innerHTML = `${msg.user} <span class="time">${msg.time || ''}</span>`;
+                    
+                    const textDiv = document.createElement('div');
+                    textDiv.textContent = msg.text;
+
+                    bubbleDiv.appendChild(userSpan);
+                    bubbleDiv.appendChild(textDiv);
+                    
+                    msgDiv.appendChild(avatarDiv);
+                    msgDiv.appendChild(bubbleDiv);
+                    
+                    chatMessagesDiv.appendChild(msgDiv);
+                });
+
+                chatMessagesDiv.scrollTop = chatMessagesDiv.scrollHeight;
+            }
+
+            // ----- TAMBAH PESAN -----
+            function addMessage(user, text) {
+                if (!text.trim()) return;
+                const newMsg = {
+                    user: user,
+                    text: text.trim(),
+                    time: getTime(),
+                    avatar: user.charAt(0).toUpperCase()
+                };
+                messages.push(newMsg);
+                saveMessages();
+                renderChat();
+            }
+
+            // ----- LOGIN -----
+            async function login() {
+                const username = usernameInput.value.trim();
+                const password = passwordInput.value.trim();
+
+                if (!username || !password) {
+                    alert('isi username & password');
+                    return;
+                }
+
+                if (usersDB.length === 0) await loadUsers();
+
+                const valid = usersDB.find(u => 
+                    u.username.toLowerCase() === username.toLowerCase() && 
+                    u.password === password
+                );
+
+                if (!valid) {
+                    alert('salah username/password');
+                    return;
+                }
+
+                currentUser = valid.username;
+                
+                loadMessages();
+                
+                // pindah layar
+                loginPage.classList.add('hide');
+                chatPage.classList.remove('hide');
+                logoutBtn.classList.remove('hide');
+                
+                addMessage('Zero', `${currentUser} masuk`);
+                
+                usernameInput.value = '';
+                passwordInput.value = '';
+            }
+
+            // ----- LOGOUT -----
+            function logout() {
+                currentUser = null;
+                chatPage.classList.add('hide');
+                loginPage.classList.remove('hide');
+                logoutBtn.classList.add('hide');
+            }
+
+            // ----- KIRIM PESAN -----
+            function sendMessage() {
+                if (!currentUser) {
+                    alert('login dulu');
+                    return;
+                }
+                const text = messageInput.value.trim();
+                if (text === '') return;
+                
+                addMessage(currentUser, text);
+                messageInput.value = '';
+                messageInput.focus();
+            }
+
+            // ----- INIT -----
+            async function init() {
+                await loadUsers();
+                loadMessages();
+                
+                loginBtn.addEventListener('click', login);
+                
+                passwordInput.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') login();
+                });
+                
+                logoutBtn.addEventListener('click', logout);
+                
+                sendBtn.addEventListener('click', sendMessage);
+                messageInput.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        sendMessage();
+                    }
+                });
+                
+                // render awal kosong
+                renderChat();
+            }
+
+            init();
+        })();
+    </script>
+</body>
+</html>
