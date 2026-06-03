@@ -1,3 +1,0 @@
-arya:arya
-udin:udin
-admin:admin
