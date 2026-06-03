@@ -8,24 +8,30 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server);
 
-app.use(express.static("public"));
+// Static file dari folder utama
+app.use(express.static(__dirname));
+
 app.use(express.json());
 
+// Home
 app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "login-daftar.html"));
+  res.sendFile(path.join(__dirname, "login-daftar.html"));
 });
 
-const ROOM_DB = "./database/room.json";
+// Database langsung di folder utama
+const ROOM_DB = "./room.json";
 
 if (!fs.existsSync(ROOM_DB)) {
   fs.writeFileSync(ROOM_DB, "[]");
 }
 
+// Ambil room
 app.get("/rooms", (req, res) => {
   const data = JSON.parse(fs.readFileSync(ROOM_DB));
   res.json(data);
 });
 
+// Buat room
 app.post("/create-room", (req, res) => {
   const { name, type, maxPlayers, owner } = req.body;
 
@@ -49,6 +55,7 @@ app.post("/create-room", (req, res) => {
   io.emit("room-update");
 });
 
+// Socket
 io.on("connection", (socket) => {
   console.log("User Connected");
 
@@ -63,6 +70,9 @@ io.on("connection", (socket) => {
   });
 });
 
-server.listen(3000, () => {
-  console.log("Skypee Games Running");
+// Run server
+const PORT = process.env.PORT || 3000;
+
+server.listen(PORT, "0.0.0.0", () => {
+  console.log(`Skypee Games Running on ${PORT}`);
 });
